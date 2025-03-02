@@ -31,43 +31,41 @@ form.addEventListener('submit', async event => {
     gallery.innerHTML = '';
     hideLoadBtn(loadBtn);
 
-    setTimeout(async () => {
-      try {
-        const response = await fetchData(searchQuery, currentPage);
-        const images = response.data.hits;
-        totalHits = response.data.totalHits;
-        form.elements.search.value = '';
+    try {
+      const response = await fetchData(searchQuery, currentPage);
+      const images = response.data.hits;
+      totalHits = response.data.totalHits;
+      form.elements.search.value = '';
 
-        if (images.length === 0) {
-          showMessage(`Sorry, no images found. Please try again!`);
-          hideLoadBtn(loadBtn);
-        } else {
-          addMarkup(images);
-
-          scrollToGalleryItem();
-
-          currentPage += 1;
-          loadedImages += images.length;
-
-          if (loadedImages >= totalHits) {
-            hideLoadBtn(loadBtn);
-            showMessage(
-              '',
-              `We're sorry, but you've reached the end of search results.`
-            );
-          } else {
-            showLoadBtn(loadBtn);
-          }
-        }
-      } catch (error) {
-        showMessage(
-          'Sorry, there was an error fetching the images. Please try again!'
-        );
+      if (images.length === 0) {
+        showMessage(`Sorry, no images found. Please try again!`);
         hideLoadBtn(loadBtn);
-      } finally {
-        closeLoader(loader);
+      } else {
+        addMarkup(images);
+
+        scrollToGalleryItem();
+
+        currentPage += 1;
+        loadedImages += images.length;
+
+        if (loadedImages >= totalHits) {
+          hideLoadBtn(loadBtn);
+          showMessage(
+            '',
+            `We're sorry, but you've reached the end of search results.`
+          );
+        } else {
+          showLoadBtn(loadBtn);
+        }
       }
-    }, 1000);
+    } catch (error) {
+      showMessage(
+        'Sorry, there was an error fetching the images. Please try again!'
+      );
+      hideLoadBtn(loadBtn);
+    } finally {
+      closeLoader(loader);
+    }
   } else {
     showMessage('Please enter a search query!');
   }
@@ -79,37 +77,35 @@ loadBtn.addEventListener('click', async e => {
   showLoader(loader);
   gallery.insertAdjacentElement('afterend', loader);
 
-  setTimeout(async () => {
-    try {
-      const response = await fetchData(searchQuery, currentPage);
-      const images = response.data.hits;
-      loadedImages += images.length;
+  try {
+    const response = await fetchData(searchQuery, currentPage);
+    const images = response.data.hits;
+    loadedImages += images.length;
 
-      if (images.length > 0) {
-        addMarkup(images);
-        currentPage += 1;
+    if (images.length > 0) {
+      addMarkup(images);
+      currentPage += 1;
 
-        scrollToGalleryItem();
-      }
-
-      if (loadedImages >= totalHits) {
-        hideLoadBtn(loadBtn);
-        showMessage(
-          '',
-          `We're sorry, but you've reached the end of search results.`
-        );
-      } else {
-        showLoadBtn(loadBtn);
-      }
-    } catch (error) {
-      showMessage(
-        'Sorry, there was an error fetching more images. Please try again!'
-      );
-    } finally {
-      closeLoader(loader);
-      if (loadedImages < totalHits) {
-        showLoadBtn(loadBtn); // Показуємо кнопку, якщо ще є зображення
-      }
+      scrollToGalleryItem();
     }
-  }, 1000);
+
+    if (loadedImages >= totalHits) {
+      hideLoadBtn(loadBtn);
+      showMessage(
+        '',
+        `We're sorry, but you've reached the end of search results.`
+      );
+    } else {
+      showLoadBtn(loadBtn);
+    }
+  } catch (error) {
+    showMessage(
+      'Sorry, there was an error fetching more images. Please try again!'
+    );
+  } finally {
+    closeLoader(loader);
+    if (loadedImages < totalHits) {
+      showLoadBtn(loadBtn); // Показуємо кнопку, якщо ще є зображення
+    }
+  }
 });

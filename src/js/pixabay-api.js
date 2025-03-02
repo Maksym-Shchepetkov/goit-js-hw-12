@@ -15,9 +15,9 @@ export default async function fetchData(searchByText, page = 1) {
 
   try {
     const response = await axios.get('https://pixabay.com/api/', options);
-    return response; // Повертаємо відповідь від API
+    return response;
   } catch (error) {
     console.error('Error fetching data from Pixabay:', error);
-    throw error; // Генеруємо помилку, щоб можна було обробити її у викликаючому коді
+    throw error;
   }
 }
