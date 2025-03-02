@@ -28,7 +28,7 @@
 .info-container {
   position: absolute;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   background-color: #ffffff;
   bottom: 0;
   border-bottom: 1px solid #808080;
@@ -38,6 +38,8 @@
   height: 48px;
   gap: 32px;
   padding-top: 4px;
+  padding-left: 20px;
+  padding-right: 25px;
   padding-bottom: 4px;
 }
 
